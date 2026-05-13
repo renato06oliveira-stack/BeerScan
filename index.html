@@ -71,6 +71,20 @@ function startScanner(){
 
 scanner = new Html5Qrcode("reader");
 
+<script>
+
+const produtos = {
+"789604550001":"Heineken - PREMIUM",
+"789199101234":"Amstel - MAINSTREAM",
+"789123456789":"Baden Baden - CRAFT"
+};
+
+let scanner;
+
+function startScanner(){
+
+scanner = new Html5Qrcode("reader");
+
 scanner.start(
 { facingMode: "environment" },
 { fps:10, qrbox:250 },
