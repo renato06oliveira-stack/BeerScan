@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BeerScan</title>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+<style>
+body{
+font-family:Arial;
+text-align:center;
+padding:20px;
+}
+#reader{
+width:300px;
+margin:auto;
+}
+#result{
+margin-top:20px;
+font-size:22px;
+font-weight:bold;
+}
+button{
+padding:15px;
+font-size:18px;
+margin-bottom:20px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🍺 BeerScan</h2>
+
+<button onclick="startScanner()">Escanear Produto</button>
+
+<div id="reader"></div>
+
+<div id="result">Clique em Escanear</div>
+
+<script>
+
+const produtos = {
+"789604550001":"Heineken - PREMIUM",
+"789199101234":"Amstel - MAINSTREAM",
+"789123456789":"Baden Baden - CRAFT"
+};
+
+let scanner;
+
+function startScanner(){
+
+scanner = new Html5Qrcode("reader");
+
+Html5Qrcode.getCameras().then(devices => {
+
+if(devices && devices.length){
+
+scanner.start(
+devices[0].id,
+{fps:10, qrbox:250},
+(decodedText)=>{
+
+if(produtos[decodedText]){
+document.getElementById("result").innerHTML =
+produtos[decodedText];
+}else{
+document.getElementById("result").innerHTML =
+"Produto não cadastrado";
+}
+
+scanner.stop();
+}
+);
+}
+
+});
+}
+
+</script>
+
+</body>
+</html>
