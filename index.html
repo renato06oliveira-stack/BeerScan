@@ -41,65 +41,70 @@ margin-bottom:20px;
 
 <script>
 
+// ===== MARCAS =====
 const marcas = {
 
 CORONA:{
 nome:"Cerveja Corona Extra",
 categoria:"PREMIUM",
 imagem:"https://i.imgur.com/HU3W2Q5.png"
-},
+}
 
 };
 
+// ===== SKUS =====
 const skus = {
 
 "7891991305846":"Cerveja Corona Extra",
 "7891149108718":"Cerveja Corona Extra",
-"7891149108749":"Cerveja Corona Extra", 
+"7891149108749":"Cerveja Corona Extra"
 
-}; 
+};
 
 let scanner;
 
+// ===== INICIAR CAMERA =====
 function startScanner(){
+
+document.getElementById("result").innerHTML = "Abrindo câmera...";
 
 scanner = new Html5Qrcode("reader");
 
-Html5Qrcode.getCameras().then(devices => {
+Html5Qrcode.getCameras()
+.then(devices => {
 
-if(!devices.length){
+if(!devices || devices.length === 0){
 alert("Nenhuma câmera encontrada");
 return;
 }
 
-// procura câmera traseira
+// tenta pegar câmera traseira
 let cameraId = devices[0].id;
 
-devices.forEach(device => {
-if(device.label.toLowerCase().includes("back") ||
+for(let device of devices){
+if(
+device.label.toLowerCase().includes("back") ||
 device.label.toLowerCase().includes("traseira") ||
-device.label.toLowerCase().includes("environment")){
+device.label.toLowerCase().includes("environment")
+){
 cameraId = device.id;
 }
-});
+}
 
 scanner.start(
 cameraId,
 {
 fps:10,
-qrbox:250,
-formatsToSupport: [
-Html5QrcodeSupportedFormats.EAN_13,
-Html5QrcodeSupportedFormats.EAN_8,
-Html5QrcodeSupportedFormats.UPC_A,
-Html5QrcodeSupportedFormats.UPC_E
-]
+qrbox:{width:250,height:150}
 },
-  
+
 (decodedText)=>{
 
 let codigo = decodedText.trim();
 
+console.log("Código lido:", codigo);
+
+// ===== VERIFICA PRODUTO =====
 if(skus[codigo]){
 
 let marcaKey = skus[codigo];
@@ -114,12 +119,27 @@ document.getElementById("result").innerHTML = `
 }else{
 
 document.getElementById("result").innerHTML =
-"Produto não cadastrado";
-
+"❌ Produto não cadastrado";
 }
 
 scanner.stop();
+
+},
+
+(errorMessage)=>{
+// ignora erros de leitura contínua
 }
+);
+
+})
+.catch(err=>{
+console.log(err);
+alert("Erro ao acessar câmera");
+});
+
 }
 
 </script>
+
+</body>
+</html>
