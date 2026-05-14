@@ -97,9 +97,11 @@ Html5QrcodeSupportedFormats.UPC_E
 },
 (decodedText)=>{
 
-if(skus[decodedText]){
+let codigo = decodedText.trim();
 
-let marcaKey = skus[decodedText];
+if(skus[codigo]){
+
+let marcaKey = skus[codigo];
 let produto = marcas[marcaKey];
 
 document.getElementById("result").innerHTML = `
