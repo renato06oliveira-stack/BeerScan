@@ -44,7 +44,7 @@ margin-bottom:20px;
 const marcas = {
 
 CORONA:{
-nome:"Cerveja Corona EXtra",
+nome:"Cerveja Corona Extra",
 categoria:"PREMIUM",
 imagem:"https://i.imgur.com/HU3W2Q5.png"
 },
@@ -53,9 +53,9 @@ imagem:"https://i.imgur.com/HU3W2Q5.png"
 
  const skus = {
 
-"7891991305846":"CORONA",
-"7891149108718":"CORONA",
-"7891149108749":"CORONA", 
+"7891991305846":"Cerveja Corona Extra",
+"7891149108718":"Cerveja Corona Extra",
+"7891149108749":"Cerveja Corona Extra", 
 
  }; 
 
@@ -88,9 +88,10 @@ cameraId,
 { fps:10, qrbox:250 },
 (decodedText)=>{
 
-if(produtos[decodedText]){
+if(skus[decodedText]){
 
-let produto = produtos[decodedText];
+let marcaKey = skus[decodedText];
+let produto = marcas[marcaKey];
 
 document.getElementById("result").innerHTML = `
 <h3>${produto.nome}</h3>
