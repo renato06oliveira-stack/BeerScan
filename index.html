@@ -95,14 +95,17 @@ Html5QrcodeSupportedFormats.UPC_A,
 Html5QrcodeSupportedFormats.UPC_E
 ]
 },
+  
 (decodedText)=>{
 
 console.log(decodedText);
 alert(decodedText);
 
-if(skus[decodedText]){
+let codigo = decodedText.trim();
 
-let marcaKey = skus[decodedText];
+if(skus[codigo]){
+
+let marcaKey = skus[codigo];
 let produto = marcas[marcaKey];
 
 document.getElementById("result").innerHTML = `
