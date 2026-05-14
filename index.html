@@ -99,10 +99,14 @@ Html5QrcodeSupportedFormats.UPC_E
 
 let codigo = decodedText.trim();
 
+console.log("Código lido:", codigo);
+
 if(skus[codigo]){
 
 let marcaKey = skus[codigo];
 let produto = marcas[marcaKey];
+
+console.log(produto);
 
 document.getElementById("result").innerHTML = `
 <h3>${produto.nome}</h3>
@@ -113,16 +117,9 @@ document.getElementById("result").innerHTML = `
 }else{
 
 document.getElementById("result").innerHTML =
-"Produto não cadastrado";
+"❌ Produto não cadastrado<br>Código: "+codigo;
 
 }
 
 scanner.stop();
 }
-);
-
-});
-
-}
-
-</script> 
