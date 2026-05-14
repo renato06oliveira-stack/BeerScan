@@ -42,10 +42,12 @@ margin-bottom:20px;
 <script>
 
 const produtos = {
-"7891991305846":"Corona 473ml - PREMIUM",
-"7891149108718":"Corona 330ml - Premium",
-"789123456789":"Baden Baden - CRAFT"
-};
+  "7891991305846":{
+nome:"Corona 473ml",
+categoria:"PREMIUM",
+imagem:"https://i.imgur.com/0XKzn8y.png"
+},
+
 
 let scanner;
 
@@ -77,11 +79,20 @@ cameraId,
 (decodedText)=>{
 
 if(produtos[decodedText]){
-document.getElementById("result").innerHTML =
-produtos[decodedText];
+
+let produto = produtos[decodedText];
+
+document.getElementById("result").innerHTML = `
+<h3>${produto.nome}</h3>
+<p>Categoria: ${produto.categoria}</p>
+<img src="${produto.imagem}" width="200">
+`;
+
 }else{
+
 document.getElementById("result").innerHTML =
 "Produto não cadastrado";
+
 }
 
 scanner.stop();
