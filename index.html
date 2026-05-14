@@ -51,13 +51,13 @@ imagem:"https://i.imgur.com/HU3W2Q5.png"
 
 };
 
- const skus = {
+const skus = {
 
 "7891991305846":"Cerveja Corona Extra",
 "7891149108718":"Cerveja Corona Extra",
 "7891149108749":"Cerveja Corona Extra", 
 
- }; 
+}; 
 
 let scanner;
 
@@ -96,6 +96,9 @@ Html5QrcodeSupportedFormats.UPC_E
 ]
 },
 (decodedText)=>{
+
+console.log(decodedText);
+alert(decodedText);
 
 if(skus[decodedText]){
 
