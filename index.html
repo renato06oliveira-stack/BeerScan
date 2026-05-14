@@ -44,7 +44,7 @@ margin-bottom:20px;
 const marcas = {
 
 CORONA:{
-nome:"Corona",
+nome:"Cerveja Corona Extra",
 categoria:"PREMIUM",
 imagem:"https://i.imgur.com/HU3W2Q5.png"
 },
@@ -53,15 +53,19 @@ imagem:"https://i.imgur.com/HU3W2Q5.png"
 
  const skus = {
 
-"7891991305846":"Corona",
-"7891149108718":"Corona",
-"7891149108749":"Corona", 
+"7891991305846":"CORONA",
+"7891149108718":"CORONA",
+"7891149108749":"CORONA", 
 
  }; 
 
 let scanner;
 
 function startScanner(){
+
+if(scanner){
+scanner.stop().catch(()=>{});
+}
 
 scanner = new Html5Qrcode("reader");
 
@@ -72,7 +76,6 @@ alert("Nenhuma câmera encontrada");
 return;
 }
 
-// procura câmera traseira
 let cameraId = devices[0].id;
 
 devices.forEach(device => {
@@ -88,7 +91,7 @@ cameraId,
 {
 fps:10,
 qrbox:250,
-formatsToSupport: [
+formatsToSupport:[
 Html5QrcodeSupportedFormats.EAN_13,
 Html5QrcodeSupportedFormats.EAN_8,
 Html5QrcodeSupportedFormats.UPC_A,
@@ -99,14 +102,10 @@ Html5QrcodeSupportedFormats.UPC_E
 
 let codigo = decodedText.trim();
 
-console.log("Código lido:", codigo);
-
 if(skus[codigo]){
 
 let marcaKey = skus[codigo];
 let produto = marcas[marcaKey];
-
-console.log(produto);
 
 document.getElementById("result").innerHTML = `
 <h3>${produto.nome}</h3>
@@ -117,9 +116,14 @@ document.getElementById("result").innerHTML = `
 }else{
 
 document.getElementById("result").innerHTML =
-"❌ Produto não cadastrado<br>Código: "+codigo;
+"Produto não cadastrado";
 
 }
 
 scanner.stop();
+
+}
+);
+
+});
 }
