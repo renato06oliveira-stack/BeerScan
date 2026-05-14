@@ -13,13 +13,8 @@ text-align:center;
 padding:20px;
 }
 #reader{
-width:300px;
+width:320px;
 margin:auto;
-}
-#result{
-margin-top:20px;
-font-size:22px;
-font-weight:bold;
 }
 button{
 padding:15px;
@@ -33,7 +28,7 @@ margin-bottom:20px;
 
 <h2>🍺 BeerScan</h2>
 
-<button onclick="startScanner()">Escanear Produto</button>
+<button id="startBtn">Escanear Produto</button>
 
 <div id="reader"></div>
 
@@ -41,83 +36,58 @@ margin-bottom:20px;
 
 <script>
 
-const marcas = {
+// ===== PRODUTOS =====
 
+const marcas = {
 CORONA:{
 nome:"Cerveja Corona Extra",
 categoria:"PREMIUM",
 imagem:"https://i.imgur.com/HU3W2Q5.png"
-},
-
+}
 };
 
- const skus = {
-
+const skus = {
 "7891991305846":"CORONA",
 "7891149108718":"CORONA",
-"7891149108749":"CORONA", 
+"7891149108749":"CORONA"
+};
 
- }; 
+// ===== SCANNER =====
 
-let scanner;
+let scanner = null;
 
-function startScanner(){
+document.getElementById("startBtn").addEventListener("click", iniciarCamera);
 
-if(scanner){
-scanner.stop().catch(()=>{});
-}
+function iniciarCamera(){
 
-scanner = new Html5Qrcode("reader");
-
-Html5Qrcode.getCameras().then(devices => {
-
-if(!devices.length){
-alert("Nenhuma câmera encontrada");
-return;
-}
-
-let cameraId = devices[0].id;
-
-devices.forEach(device => {
-if(device.label.toLowerCase().includes("back") ||
-device.label.toLowerCase().includes("traseira") ||
-device.label.toLowerCase().includes("environment")){
-cameraId = device.id;
-}
-});
-
-<script>
-
-let scanner;
-
-function startScanner(){
-
-if(scanner){
-scanner.stop().catch(()=>{});
-}
+document.getElementById("reader").innerHTML = "";
 
 scanner = new Html5Qrcode("reader");
 
 scanner.start(
-{ facingMode: "environment" }, // força câmera traseira
+{ facingMode: { exact: "environment" } }, // FORÇA câmera traseira
 {
 fps:10,
-qrbox:{ width:250, height:250 },
-formatsToSupport:[
-Html5QrcodeSupportedFormats.EAN_13,
-Html5QrcodeSupportedFormats.EAN_8,
-Html5QrcodeSupportedFormats.UPC_A,
-Html5QrcodeSupportedFormats.UPC_E
-]
+qrbox:{width:250,height:250}
 },
-(decodedText)=>{
+onScanSuccess,
+onScanError
+)
+.catch(err=>{
+alert("Erro ao abrir câmera: " + err);
+});
+
+}
+
+// ===== LEITURA =====
+
+function onScanSuccess(decodedText){
 
 let codigo = decodedText.trim();
 
 if(skus[codigo]){
 
-let marcaKey = skus[codigo];
-let produto = marcas[marcaKey];
+let produto = marcas[skus[codigo]];
 
 document.getElementById("result").innerHTML = `
 <h3>${produto.nome}</h3>
@@ -126,18 +96,18 @@ document.getElementById("result").innerHTML = `
 `;
 
 }else{
-
 document.getElementById("result").innerHTML =
 "Produto não cadastrado";
-
 }
 
 scanner.stop();
 
-},
-(error)=>{}
-);
+}
 
+function onScanError(error){
 }
 
 </script>
+
+</body>
+</html>
